@@ -4,9 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical" 
     android:id="@+id/dialog">
- 	<EditText 
- 	    android:layout_height="wrap_content"
-        android:layout_width="fill_parent" 
-        android:id="@+id/etname" 
+    <TextView  
+    android:id="@+id/description"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="当前值0"
+    android:gravity="center_horizontal"
+    android:textColor="@android:color/white"
+    />
+ 	<SeekBar
+    android:id="@+id/seekBar"  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:layout_marginLeft="5dip"
+    android:layout_marginRight="5dip"
     />
 </LinearLayout>

@@ -14,6 +14,7 @@ import com.jason.yeelink.util.PullToRefreshView;
 import com.jason.yeelink.util.PullToRefreshView.OnHeaderRefreshListener;
 import com.jason.yeelink.util.YeelinkAdapter;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,6 +33,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +50,8 @@ public class SensorsActivity extends Activity{
 	private int first=0;
 	private Dialog dialog;
 	private View localView;
-	private EditText editText;   
+	private SeekBar seekBar;   
+	private TextView textDisp;
 	private AlertDialog myDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,23 +115,48 @@ public class SensorsActivity extends Activity{
 						final int position, long arg3) {
 					// TODO Auto-generated method stub
 					localView=LayoutInflater.from(SensorsActivity.this).inflate(R.layout.dialog, null);
-					editText=(EditText)localView.findViewById(R.id.etname);
+					seekBar=(SeekBar)localView.findViewById(R.id.seekBar);
+					textDisp=(TextView)localView.findViewById(R.id.description);
 				    myDialog=new AlertDialog.Builder(SensorsActivity.this).setTitle("修改").setView(localView).setPositiveButton("确定", new OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method stub
-							String ssString=YeelinkAdapter.changeGen(apikey,dev.getId(), sen.senList.get(position).getId(), editText.getText().toString());
-							sen.senList.get(position).setLast_data_gen(YeelinkAdapter.setLastGen(SensorsActivity.apikey, editText.getText().toString()));
+							String ssString=YeelinkAdapter.changeGen(apikey,dev.getId(), sen.senList.get(position).getId(), String.valueOf(seekBar.getProgress()));
+							sen.senList.get(position).setLast_data_gen(YeelinkAdapter.setLastGen(SensorsActivity.apikey, String.valueOf(seekBar.getProgress())));
 							ada.notifyDataSetChanged();
 						}
 					}).setNegativeButton("取消", null).show();
 					
+				    seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+						
+						@Override
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							//textDisp.setText("当前值："+progress);
+						}
+						
+						@Override
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							//textDisp.setText("当前值："+progress);
+						}
+						
+						@Override
+						public void onProgressChanged(SeekBar seekBar, int progress,
+								boolean fromUser) {
+							// TODO Auto-generated method stub
+							textDisp.setText("当前值："+progress);
+						}
+					});
 				  //提醒设置界面各个控件的值
 				    if(sen.senList.get(position).getLast_data_gen()==null){
-				    	editText.setText("");
+				    	textDisp.setText("当前值："+0);
+				    	seekBar.setProgress(0);
 				    }else{
-				    	editText.setText(YeelinkAdapter.getGen(sen.senList.get(position).getLast_data_gen()));
+				    	int disp=Integer.valueOf(YeelinkAdapter.getGen(sen.senList.get(position).getLast_data_gen()));
+				    	textDisp.setText("当前值："+disp);
+				    	seekBar.setProgress(disp);
 				    }
 				}
 			});

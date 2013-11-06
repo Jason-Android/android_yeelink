@@ -107,9 +107,9 @@ public class SenLsAdapter extends BaseAdapter{
 			case 10://微博抓取器
 				convertView=setWBview(sensor, convertView);
 				break;
-	/*		default:
-				convertView=setWBview(sensor,convertView);
-				break*/
+			default:
+				convertView=setNumView(sensor,convertView);
+				break;
 		}
 		return convertView;
 	}
@@ -134,6 +134,7 @@ public class SenLsAdapter extends BaseAdapter{
 		nholder.list_image.setImageDrawable(context.getResources().getDrawable(R.drawable.charts_icon));		
 		nholder.main_text.setText(sensor.getTitle());
 		nholder.about_text.setText(sensor.getLast_data());
+		//Log.v("gen", sensor.getLast_data_gen());
 		return convertView;
 	}
 	//开关型传感器
